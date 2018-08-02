@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">HodohodAdmin</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mount_arafat">جبل عرفات</string>
+
+
+    <string-array name="area_arrays">
+        <item>@string/mount_arafat</item>
+    </string-array>
+
+</resources>
