@@ -28,28 +28,63 @@
         app:layout_constraintGuide_percent="0.20" />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/serviceProviderRecyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        android:translationX="4dp"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toBottomOf="@id/map"
-        app:layout_constraintEnd_toEndOf="@id/map"
-        app:layout_constraintTop_toTopOf="@id/map" />
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/layout_bg"
+        android:elevation="4dp"
+        android:translationX="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/mapContainer"
+        app:layout_constraintEnd_toEndOf="@id/mapContainer"
+        app:layout_constraintTop_toTopOf="@id/mapContainer"
+        app:layout_constraintWidth_percent="0.25">
+
+        <TextView
+            android:id="@+id/serviceProviderTypeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="نوع مقدم الخدمة"
+            android:textColor="#485465"
+            android:textSize="23sp" />
+
+
+        <TextView
+            android:id="@+id/serviceProviderTotalNumberTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:textColor="#858585"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/serviceProviderTypeTextView" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/serviceProviderRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/serviceProviderTotalNumberTextView" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <LinearLayout
+        android:id="@+id/mapContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline1"
-        tools:context=".MainActivity" />
+        app:layout_constraintTop_toBottomOf="@id/guideline1">
 
+        <fragment
+            android:id="@+id/mapFramgent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity" />
+    </LinearLayout>
 
 
     <android.support.constraint.Guideline
