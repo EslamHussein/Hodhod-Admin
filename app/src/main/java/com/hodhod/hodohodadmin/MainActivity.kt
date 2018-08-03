@@ -20,6 +20,11 @@ import android.text.method.TextKeyListener.clear
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.mafqoud_include.*
+import kotlinx.android.synthetic.main.main_toolbar_layout_include.*
+import kotlinx.android.synthetic.main.mared_include.*
+import kotlinx.android.synthetic.main.z7am_include.*
+import kotlinx.android.synthetic.main.zebala_include.*
 
 
 const val TAG = "MainActivity"
@@ -38,6 +43,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
     private var reporterList: List<SampleClusterItem> = emptyList()
 
     private var issuesMarker = mutableMapOf<String, Marker>()
+
+    private var issuesList = mutableListOf<Issue>()
+
     private lateinit var mClusterManager: ClusterManager<SampleClusterItem>
 
 
@@ -73,6 +81,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
         mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
 
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(21.3549, 39.9841)));
+
+        val zoomLevel = 16.0f //This goes up to 21
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.3549, 39.9841), zoomLevel))
 
 
 
@@ -88,14 +100,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
             override fun onDataChange(data: DataSnapshot) {
 
 
-                val list = mutableListOf<Issue>()
-
                 data.children.forEach {
 
 
                     val issue = it.getValue(Issue::class.java)
 
-                    list.add(issue!!)
+                    issuesList.add(issue!!)
 
 
                     val markerOptions = MarkerOptions()
@@ -107,7 +117,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
                     // Clears the previously touched position
                     // Placing a marker on the touched position
                     issuesMarker[it.key.toString()] = googleMap.addMarker(markerOptions)
-
+                    updateAnalytics()
                 }
 
 
@@ -131,6 +141,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
             override fun onChildAdded(data: DataSnapshot, p1: String?) {
 
                 val issue = data.getValue(Issue::class.java)
+
+                issuesList.add(issue!!)
                 val markerOptions = MarkerOptions()
 
                 // Setting the position for the marker
@@ -138,12 +150,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
 
                 issuesMarker[data.key.toString()] = googleMap.addMarker(markerOptions)
 
-
+                updateAnalytics()
             }
 
             override fun onChildRemoved(data: DataSnapshot) {
+                val issue = data.getValue(Issue::class.java)
+
                 issuesMarker[data.key.toString()]?.remove()
                 issuesMarker.remove(data.key.toString())
+                issuesList.remove(issue)
+                updateAnalytics()
 
             }
         })
@@ -190,6 +206,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
         val layout = LinearLayoutManager(this)
         serviceProviderRecyclerView.layoutManager = layout
         serviceProviderRecyclerView.adapter = ServiceProvidersAdapter(serviceProviderItems)
+
+
+    }
+
+
+    fun updateAnalytics() {
+
+        val x = issuesList.groupBy {
+            it.type
+        }
+
+
+
+        zebalaNumberTextView.text = (x["rubbish"]?.size ?: 0).toString()
+        z7amNumberTextView.text = (x["crowding"]?.size ?: 0).toString()
+        mafqoudNumberTextView.text = (x["missing"]?.size ?: 0).toString()
+        maredNumberTextView.text = (x["fatigue"]?.size ?: 0).toString()
 
 
     }
