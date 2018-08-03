@@ -17,6 +17,8 @@ import com.hodhod.hodohodadmin.dto.ServiceProviderItem
 import kotlinx.android.synthetic.main.activity_maps.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import android.text.method.TextKeyListener.clear
+import android.view.View
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -113,11 +115,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
                     // Setting the position for the marker
                     markerOptions.position(LatLng(issue.lat, issue.lon))
 
-
-                    // Clears the previously touched position
-                    // Placing a marker on the touched position
-                    issuesMarker[it.key.toString()] = googleMap.addMarker(markerOptions)
-                    updateAnalytics()
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.group))
+                            // Clears the previously touched position
+                            // Placing a marker on the touched position
+                            issuesMarker [it.key.toString()] = googleMap.addMarker(markerOptions)
+                            updateAnalytics ()
                 }
 
 
@@ -151,6 +153,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, ValueEventListener
                 issuesMarker[data.key.toString()] = googleMap.addMarker(markerOptions)
 
                 updateAnalytics()
+
             }
 
             override fun onChildRemoved(data: DataSnapshot) {
